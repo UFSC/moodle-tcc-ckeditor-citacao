@@ -18,7 +18,7 @@ CKEDITOR.plugins.add('citacao', {
         editor.ui.addButton('Citacao', {
             label: 'Inserir Citação',
             command: 'citacaoDialog',
-            toolbar: 'insert'
+            toolbar: 'editing'
         });
 
         CKEDITOR.dialog.add('citacaoDialog', this.path + 'dialogs/citacao.js');
