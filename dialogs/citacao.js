@@ -1,14 +1,16 @@
 CKEDITOR.dialog.add('citacaoDialog', function (editor) {
 
-    var items = [];
+    var general_refs = [];
+    var urls = [];
     $.ajax({
         dataType: "json",
         url: 'bibliographies.json',
         async: false,
         success: function (data) {
-            $.each(data, function (key, val) {
-                //TODO melhorar a construção do array que vai para a dialog
-                items.push([val.general_ref.reference_text, [val.general_ref.id, val.general_ref.direct_citation, val.general_ref.indirect_citation, val.general_ref.reference_text]]);
+            //TODO melhorar a construção do array que vai para a dialog
+            urls = data.urls;
+            $.each(data.references.general_refs, function (key, val) {
+                general_refs.push([val.general_ref.reference_text, ['g', val.general_ref.id, val.general_ref.direct_citation, val.general_ref.indirect_citation, val.general_ref.reference_text]]);
             });
         }
     });
@@ -27,7 +29,7 @@ CKEDITOR.dialog.add('citacaoDialog', function (editor) {
                         id: 'ref-list',
                         style: 'width: 400px',
                         label: 'Escolha a citação',
-                        items: items
+                        items: general_refs
 
                     },
                     {
@@ -62,17 +64,17 @@ CKEDITOR.dialog.add('citacaoDialog', function (editor) {
         onOk: function () {
             var selected_citacao = this.getValueOf('tab-general-ref', 'ref-list').split(',');
             var tipo_citacao = this.getValueOf('tab-general-ref', 'ref-cit');
-            var id_citacao = selected_citacao[0];
-
+            var id_citacao = selected_citacao[1];
+            var ref_type = selected_citacao[0];
 
             if (tipo_citacao == 'cd') {
-                var citacao_text = selected_citacao[1];
-            } else {
                 var citacao_text = selected_citacao[2];
+            } else {
+                var citacao_text = selected_citacao[3];
             }
 
 
-            CKEDITOR.plugins.citacao.createPlaceholder(editor, this, id_citacao, citacao_text);
+            CKEDITOR.plugins.citacao.createPlaceholder(editor, this, id_citacao, citacao_text, ref_type);
         }
 
     };

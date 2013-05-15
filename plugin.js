@@ -30,19 +30,20 @@ CKEDITOR.plugins.add('citacao', {
 
 
 CKEDITOR.plugins.citacao = {
-    createPlaceholder: function (editor, dialog, id_citacao, citacao_text) {
+    createPlaceholder: function (editor, dialog, id_citacao, citacao_text, ref_type) {
 
         var content;
 
         var citacao = editor.document.createElement('citacao');
 
-        content = '[[G' + id_citacao + ' ' + citacao_text + ']]';
+        content = '[['+ ref_type + id_citacao + ' ' + citacao_text + ']]';
         citacao.setAttributes({
             contentEditable: 'false',
             'class': 'citacao-class'
         });
         citacao.setAttribute('title', content);
-        citacao.setAttribute('title', content);
+        citacao.setAttribute('citacao-text', citacao_text);
+        citacao.setAttribute('ref-type', ref_type);
         citacao.setAttribute('id', id_citacao);
         citacao.setText(content);
 
