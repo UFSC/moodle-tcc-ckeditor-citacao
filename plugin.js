@@ -11,9 +11,8 @@ CKEDITOR.plugins.add('citacao', {
     init: function (editor) {
 
         editor.addCommand('createCitacao', new CKEDITOR.dialogCommand('citacaoDialog'));
-
         editor.addCommand('citacaoDialog', new CKEDITOR.dialogCommand('citacaoDialog'));
-        editor.addCommand( 'editDialog', new CKEDITOR.dialogCommand( 'editDialog' ) );
+        editor.addCommand('editDialog', new CKEDITOR.dialogCommand('editDialog'));
 
         editor.ui.addButton('Citacao', {
             label: 'Inserir Citação',
@@ -31,12 +30,9 @@ CKEDITOR.plugins.add('citacao', {
 
 CKEDITOR.plugins.citacao = {
     createPlaceholder: function (editor, dialog, id_citacao, citacao_text, ref_type) {
-
-        var content;
-
         var citacao = editor.document.createElement('citacao');
 
-        content = '[['+ ref_type + id_citacao + ' ' + citacao_text + ']]';
+        var content = '[[' + ref_type + id_citacao + ' ' + citacao_text + ']]';
         citacao.setAttributes({
             contentEditable: 'false',
             'class': 'citacao-class'

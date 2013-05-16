@@ -49,21 +49,22 @@ CKEDITOR.dialog.add('citacaoDialog', function (editor) {
                                 'default': 'cd'
                             }
                         ]
+                    },
+                    {
+                        type: 'html',
+                        id: 'new-citacao',
+                        label: 'Criar Nova Citação',
+                        html: '<a href="' + urls.general_ref + '">Nova Referência</a>'
                     }
-//                    ,
-//                    {
-//                        type: 'html',
-//                        id: 'new-citacao',
-//                        label: 'Criar Nova Citação',
-//                        html: "<a href='/general_refs/new'>Criar Nova Referência</a>"
-//                    }
 
                 ]
+
             }
+
         ],
         onOk: function () {
-            var selected_citacao = this.getValueOf('tab-general-ref', 'ref-list').split(',');
-            var tipo_citacao = this.getValueOf('tab-general-ref', 'ref-cit');
+            var selected_citacao = this.getValueOf(this._.currentTabId, 'ref-list').split(',');
+            var tipo_citacao = this.getValueOf(this._.currentTabId, 'ref-cit');
             var id_citacao = selected_citacao[1];
             var ref_type = selected_citacao[0];
 
