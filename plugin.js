@@ -63,7 +63,7 @@ CKEDITOR.plugins.add('citacao', {
 
 
 CKEDITOR.plugins.citacao = {
-    createPlaceholder: function (editor, dialog, id_citacao, citacao_text, ref_type) {
+    createPlaceholder: function (editor, dialog, id_citacao, citacao_text, ref_type, citacao_type) {
         var citacao = editor.document.createElement('citacao');
 
         var content = '[[' + ref_type + id_citacao + ' ' + citacao_text + ']]';
@@ -75,6 +75,7 @@ CKEDITOR.plugins.citacao = {
         citacao.setAttribute('title', content);
         citacao.setAttribute('citacao-text', citacao_text);
         citacao.setAttribute('ref-type', ref_type);
+        citacao.setAttribute('citacao_type', citacao_type);
         citacao.setAttribute('id', id_citacao);
         citacao.setText(content);
 

@@ -5,7 +5,7 @@
         var urls = [];
         $.ajax({
             dataType: "json",
-            url: 'bibliographies.json',
+            url: '/bibliographies.json',
             async: false,
             success: function (data) {
                 //TODO: melhorar a construção do array que vai para a dialog
@@ -54,12 +54,12 @@
                                 }
                             ]
                         },
-                        {
-                            type: 'html',
-                            id: 'new-citacao',
-                            label: 'Criar Nova Citação',
-                            html: '<a href="' + urls.general_ref + '">Nova Referência</a>'
-                        }
+//                        {
+//                            type: 'html',
+//                            id: 'new-citacao',
+//                            label: 'Criar Nova Citação',
+//                            html: '<a href="' + urls.general_ref + '">Nova Referência</a>'
+//                        }
 
                     ]
 
@@ -94,12 +94,12 @@
                                 }
                             ]
                         },
-                        {
-                            type: 'html',
-                            id: 'new-citacao',
-                            label: 'Criar Nova Citação',
-                            html: '<a href="' + urls.book_ref + '">Nova Referência</a>'
-                        }
+//                        {
+//                            type: 'html',
+//                            id: 'new-citacao',
+//                            label: 'Criar Nova Citação',
+//                            html: '<a href="' + urls.book_ref + '">Nova Referência</a>'
+//                        }
 
                     ]
                 }
@@ -121,7 +121,7 @@
                     }
                 }
 
-                CKEDITOR.plugins.citacao.createPlaceholder(editor, this, id_citacao, citacao_text, ref_type);
+                CKEDITOR.plugins.citacao.createPlaceholder(editor, this, id_citacao, citacao_text, ref_type, tipo_citacao);
             },
             onShow: function(){
                 if(isEdit) {
