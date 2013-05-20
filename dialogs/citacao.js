@@ -1,4 +1,4 @@
-(function () {
+(function() {
     function createDialog(editor, isEdit) {
         var general_refs = [];
         var book_refs = [];
@@ -7,15 +7,21 @@
             dataType: "json",
             url: '/bibliographies.json',
             async: false,
-            success: function (data) {
+            success: function(data) {
                 //TODO: melhorar a construção do array que vai para a dialog
                 urls = data.urls;
-                $.each(data.references.general_refs, function (key, val) {
-                    general_refs.push([val.general_ref.reference_text, ['G', val.general_ref.id, val.general_ref.direct_citation, val.general_ref.indirect_citation, val.general_ref.reference_text]]);
-                });
-                $.each(data.references.book_refs, function (key, val) {
-                    book_refs.push([val.book_ref.title, ['L', val.book_ref.id, val.book_ref.title]]);
-                });
+
+                if (data.references.general_refs != null) {
+                    $.each(data.references.general_refs, function(key, val) {
+                        general_refs.push([val.general_ref.reference_text, ['G', val.general_ref.id, val.general_ref.direct_citation, val.general_ref.indirect_citation, val.general_ref.reference_text]]);
+                    });
+                }
+                if (data.references.book_refs != null) {
+                    $.each(data.references.book_refs, function(key, val) {
+                        book_refs.push([val.book_ref.title, ['L', val.book_ref.id, val.book_ref.title]]);
+                    });
+                }
+
             }
         });
         return {
@@ -105,13 +111,13 @@
                 }
 
             ],
-            onOk: function () {
+            onOk: function() {
                 var selected_citacao = this.getValueOf(this._.currentTabId, 'ref-list').split(',');
                 var tipo_citacao = this.getValueOf(this._.currentTabId, 'ref-cit');
                 var id_citacao = selected_citacao[1];
                 var ref_type = selected_citacao[0];
 
-                if(this._.currentTabId == 'tab-book-ref'){
+                if (this._.currentTabId == 'tab-book-ref') {
                     var citacao_text = tipo_citacao;
                 } else {
                     if (tipo_citacao == 'cd') {
@@ -123,19 +129,20 @@
 
                 CKEDITOR.plugins.citacao.createPlaceholder(editor, this, id_citacao, citacao_text, ref_type, tipo_citacao);
             },
-            onShow: function(){
-                if(isEdit) {
-                    this._element = CKEDITOR.plugins.citacao.getSelectedPlaceHolder( editor );
+            onShow: function() {
+                if (isEdit) {
+                    this._element = CKEDITOR.plugins.citacao.getSelectedPlaceHolder(editor);
                 }
                 this.setupContent(this._element);
             }
 
         };
     }
-    CKEDITOR.dialog.add('citacaoDialog', function (editor) {
+
+    CKEDITOR.dialog.add('citacaoDialog', function(editor) {
         return createDialog(editor);
     });
-    CKEDITOR.dialog.add('editDialog', function (editor) {
+    CKEDITOR.dialog.add('editDialog', function(editor) {
         return createDialog(editor, 1);
     });
 
