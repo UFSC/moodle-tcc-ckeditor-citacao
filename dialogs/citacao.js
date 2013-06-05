@@ -1,151 +1,113 @@
-(function() {
+(function () {
     function createDialog(editor, isEdit) {
-        var general_refs = [];
-        var book_refs = [];
-        var urls = [];
+        var result = [];
         $.ajax({
             dataType: "json",
             url: '/bibliographies.json',
             async: false,
-            success: function(data) {
-                //TODO: melhorar a construção do array que vai para a dialog
-                urls = data.urls;
-
-                if (data.references.general_refs != null) {
-                    $.each(data.references.general_refs, function(key, val) {
-                        general_refs.push([val.general_ref.reference_text, ['G', val.general_ref.id, val.general_ref.direct_citation, val.general_ref.indirect_citation, val.general_ref.reference_text]]);
-                    });
-                }
-                if (data.references.book_refs != null) {
-                    $.each(data.references.book_refs, function(key, val) {
-                        book_refs.push([val.book_ref.title, ['L', val.book_ref.id, val.book_ref.title]]);
-                    });
-                }
-
+            success: function (data) {
+                result = data;
             }
         });
-        return {
-            title: 'Adicionar Citação',
-            minWidth: 400,
-            minHeight: 200,
+        var output = [];
+        //TODO: Refatoração desse(s) loop(s)
+        $.each(result, function (key, val) {
 
-            contents: [
-                {
-                    id: 'tab-general-ref',
-                    label: 'Referência Geral',
-                    elements: [
-                        {
-                            type: 'select',
-                            id: 'ref-list',
-                            style: 'width: 400px',
-                            label: 'Escolha a citação',
-                            items: general_refs
+            var element_items = [];
 
-                        },
-                        {
-                            type: 'fieldset',
-                            id: 'fieldset-cit',
-                            label: 'Tipo de Citação',
-                            align: 'left',
-                            style: 'margin-top: 50px',
-                            children: [
-                                {
-                                    type: 'radio',
-                                    id: 'ref-cit',
-                                    items: [
-                                        [ 'Citação Direta', 'cd' ],
-                                        [ 'Citação Indireta', 'ci' ]
-                                    ],
-                                    'default': 'cd'
-                                }
-                            ]
-                        },
-//                        {
-//                            type: 'html',
-//                            id: 'new-citacao',
-//                            label: 'Criar Nova Citação',
-//                            html: '<a href="' + urls.general_ref + '">Nova Referência</a>'
-//                        }
+            // Adapta a estrutura vinda do ajax para uso no plugin.
+            $.each(val.collection, function (key, val) {
+                var obj = [];
+                var objects = [];
+                obj.push(val.display_message);
+                $.each(val, function (key, val) {
+                    obj.push(val);
+                });
+                objects.push(obj);
+                element_items.push([val.display_message, objects]);
+            });
 
-                    ]
+            var elements = [buildElement(element_items), buildTipoCitacaoChooseBox(), buildCreateNewButton(val.new_url)];
 
-                },
-                {
-                    id: 'tab-book-ref',
-                    label: 'Livros',
-                    elements: [
-                        {
-                            type: 'select',
-                            id: 'ref-list',
-                            style: 'width: 400px',
-                            label: 'Escolha a citação',
-                            items: book_refs
+            // Valores para criar tab
+            var id = 'tab-' + val.tab_name.toLowerCase();
+            var label = val.tab_name;
+            var obj = {id: id, label: label, elements: elements};
+            output.push(obj);
+        });
 
-                        },
-                        {
-                            type: 'fieldset',
-                            id: 'fieldset-cit',
-                            label: 'Tipo de Citação',
-                            align: 'left',
-                            style: 'margin-top: 50px',
-                            children: [
-                                {
-                                    type: 'radio',
-                                    id: 'ref-cit',
-                                    items: [
-                                        [ 'Citação Direta', 'cd' ],
-                                        [ 'Citação Indireta', 'ci' ]
-                                    ],
-                                    'default': 'cd'
-                                }
-                            ]
-                        },
-//                        {
-//                            type: 'html',
-//                            id: 'new-citacao',
-//                            label: 'Criar Nova Citação',
-//                            html: '<a href="' + urls.book_ref + '">Nova Referência</a>'
-//                        }
-
-                    ]
-                }
-
-            ],
-            onOk: function() {
+        var retorno = { title: 'Adicionar Citação', minWidth: 400, minHeight: 200,
+            contents: output,
+            onOk: function () {
                 var selected_citacao = this.getValueOf(this._.currentTabId, 'ref-list').split(',');
                 var tipo_citacao = this.getValueOf(this._.currentTabId, 'ref-cit');
-                var id_citacao = selected_citacao[1];
-                var ref_type = selected_citacao[0];
+                var ref_type = this._.currentTabId.split('-')[1].substr(0, 2);
 
-                if (this._.currentTabId == 'tab-book-ref') {
-                    var citacao_text = tipo_citacao;
-                } else {
+                var id_citacao = selected_citacao[1];
+
+
+                if (this._.currentTabId == 'tab-gerais') {
                     if (tipo_citacao == 'cd') {
                         var citacao_text = selected_citacao[2];
                     } else {
                         var citacao_text = selected_citacao[3];
                     }
+                } else {
+                    var citacao_text = selected_citacao[0];
                 }
 
                 CKEDITOR.plugins.citacao.createPlaceholder(editor, this, id_citacao, citacao_text, ref_type, tipo_citacao);
             },
-            onShow: function() {
+            onShow: function () {
                 if (isEdit) {
                     this._element = CKEDITOR.plugins.citacao.getSelectedPlaceHolder(editor);
                 }
                 this.setupContent(this._element);
             }
-
         };
+        return retorno;
     }
 
-    CKEDITOR.dialog.add('citacaoDialog', function(editor) {
+    CKEDITOR.dialog.add('citacaoDialog', function (editor) {
         return createDialog(editor);
     });
-    CKEDITOR.dialog.add('editDialog', function(editor) {
+    CKEDITOR.dialog.add('editDialog', function (editor) {
         return createDialog(editor, 1);
     });
 
 })();
+function buildTipoCitacaoChooseBox() {
+    return {
+        type: 'fieldset',
+        id: 'fieldset-cit',
+        label: 'Tipo de Citação',
+        align: 'left',
+        style: 'margin-top: 50px',
+        children: [
+            {
+                type: 'radio', id: 'ref-cit',
+                items: [
+                    [ 'Citação Direta', 'cd' ],
+                    [ 'Citação Indireta', 'ci' ]
+                ], 'default': 'cd'
+            }
+        ]};
+}
+function buildElement(element_items) {
+    return {
+        type: 'select',
+        id: 'ref-list',
+        style: 'width: 400px',
+        label: 'Escolha a citação',
+        items: element_items};
+}
+function buildCreateNewButton(url) {
+    return   {
+        type: 'html',
+        id: 'new-citacao',
+        label: 'Criar Nova Referências',
+        html: '<a href="' + url + '">Nova Referência</a>'
+    };
+}
 
 
