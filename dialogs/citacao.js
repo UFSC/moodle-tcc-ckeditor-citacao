@@ -27,7 +27,8 @@
                 element_items.push([val.display_message, objects]);
             });
 
-            var elements = [buildElement(element_items), buildTipoCitacaoChooseBox(val.tab_name.toLowerCase()), buildCreateNewButton(val.new_url)];
+            var elements = [buildElement(element_items), buildTipoCitacaoChooseBox(val.tab_name.toLowerCase())];
+            //var elements = [buildElement(element_items), buildTipoCitacaoChooseBox(val.tab_name.toLowerCase()), buildCreateNewButton(val.new_url)];
 
             // Valores para criar tab
             var id = val.tab_name.toLowerCase();
