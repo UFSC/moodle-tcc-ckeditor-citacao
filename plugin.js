@@ -1,6 +1,6 @@
 CKEDITOR.plugins.add('citacao', {
     icons: 'citacao',
-    onLoad: function () {
+    onLoad: function() {
         CKEDITOR.addCss('.citacao-class' +
             '{' +
             'background-color: #ffff00;' +
@@ -8,7 +8,7 @@ CKEDITOR.plugins.add('citacao', {
             '}'
         );
     },
-    init: function (editor) {
+    init: function(editor) {
 
         //editor.addCommand('createCitacao', new CKEDITOR.dialogCommand('citacaoDialog'));
 
@@ -21,8 +21,8 @@ CKEDITOR.plugins.add('citacao', {
             toolbar: 'editing'
         });
 
-        if ( editor.addMenuItems ) {
-            editor.addMenuGroup( 'citacao', 20 );
+        if (editor.addMenuItems) {
+            editor.addMenuGroup('citacao', 20);
             editor.addMenuItems({
                 editDialog: {
                     label: 'Editar Citação',
@@ -33,9 +33,9 @@ CKEDITOR.plugins.add('citacao', {
                 }
             });
 
-            if ( editor.contextMenu ) {
-                editor.contextMenu.addListener( function( element, selection ) {
-                    if ( !element || !element.data( 'cke-citacao' ) )
+            if (editor.contextMenu) {
+                editor.contextMenu.addListener(function(element, selection) {
+                    if (!element || !element.data('cke-citacao'))
                         return null;
 
                     return { editDialog: CKEDITOR.TRISTATE_OFF };
@@ -44,14 +44,14 @@ CKEDITOR.plugins.add('citacao', {
 
 
         }
-        editor.on( 'doubleclick', function( evt ) {
-            if ( CKEDITOR.plugins.citacao.getSelectedPlaceHolder( editor ) )
+        editor.on('doubleclick', function(evt) {
+            if (CKEDITOR.plugins.citacao.getSelectedPlaceHolder(editor))
                 evt.data.dialog = 'editDialog';
         });
 
-        editor.on( 'contentDom', function() {
-            editor.editable().on( 'resizestart', function( evt ) {
-                if ( editor.getSelection().getSelectedElement().data( 'cke-citacao' ) )
+        editor.on('contentDom', function() {
+            editor.editable().on('resizestart', function(evt) {
+                if (editor.getSelection().getSelectedElement().data('cke-citacao'))
                     evt.data.preventDefault();
             });
         });
@@ -63,10 +63,8 @@ CKEDITOR.plugins.add('citacao', {
 
 
 CKEDITOR.plugins.citacao = {
-    createPlaceholder: function (editor, dialog, id_citacao, citacao_text, ref_type, citacao_type) {
+    createPlaceholder: function(editor, dialog, id_citacao, citacao_text, ref_type, citacao_type) {
         var citacao = editor.document.createElement('citacao');
-
-
 
 
         var content = '[[' + ref_type + id_citacao + ' ' + citacao_text + ']]';
@@ -81,19 +79,20 @@ CKEDITOR.plugins.citacao = {
         citacao.setAttribute('ref-type', ref_type);
         citacao.setAttribute('citacao_type', citacao_type);
         citacao.setAttribute('id', id_citacao);
-        if (citacao_text == undefined){
+        if (citacao_text == undefined || citacao_text == "") {
             citacao.setText('')
-        }else{
-        citacao.setText(content);}
+        } else {
+            citacao.setText(content);
+        }
 
         editor.insertElement(citacao);
         return null;
     },
-    getSelectedPlaceHolder: function( editor ) {
+    getSelectedPlaceHolder: function(editor) {
         var range = editor.getSelection().getRanges()[ 0 ];
-        range.shrink( CKEDITOR.SHRINK_TEXT );
+        range.shrink(CKEDITOR.SHRINK_TEXT);
         var node = range.startContainer;
-        while ( node && !( node.type == CKEDITOR.NODE_ELEMENT && node.data( 'cke-citacao' ) ) )
+        while (node && !( node.type == CKEDITOR.NODE_ELEMENT && node.data('cke-citacao') ))
             node = node.getParent();
         return node;
     }
