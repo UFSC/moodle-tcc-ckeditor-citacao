@@ -27,10 +27,10 @@
                 element_items.push([val.display_message, objects]);
             });
 
-            var elements = [buildElement(element_items), buildTipoCitacaoChooseBox(), buildCreateNewButton(val.new_url)];
+            var elements = [buildElement(element_items), buildTipoCitacaoChooseBox(val.tab_name.toLowerCase()), buildCreateNewButton(val.new_url)];
 
             // Valores para criar tab
-            var id = 'tab-' + val.tab_name.toLowerCase();
+            var id = val.tab_name.toLowerCase();
             var label = val.tab_name;
             var obj = {id: id, label: label, elements: elements};
             output.push(obj);
@@ -40,13 +40,13 @@
             contents: output,
             onOk: function () {
                 var selected_citacao = this.getValueOf(this._.currentTabId, 'ref-list').split(',');
-                var tipo_citacao = this.getValueOf(this._.currentTabId, 'ref-cit');
-                var ref_type = this._.currentTabId.split('-')[1].substr(0, 2);
+                var tipo_citacao = this.getValueOf(this._.currentTabId, 'ref-cit-'+this._.currentTabId);
+                var ref_type = this._.currentTabId;
 
                 var id_citacao = selected_citacao[1];
 
 
-                if (this._.currentTabId == 'tab-gerais') {
+                if (this._.currentTabId == 'gerais') {
                     if (tipo_citacao == 'cd') {
                         var citacao_text = selected_citacao[2];
                     } else {
@@ -76,7 +76,7 @@
     });
 
 })();
-function buildTipoCitacaoChooseBox() {
+function buildTipoCitacaoChooseBox(idref) {
     return {
         type: 'fieldset',
         id: 'fieldset-cit',
@@ -85,7 +85,7 @@ function buildTipoCitacaoChooseBox() {
         style: 'margin-top: 50px',
         children: [
             {
-                type: 'radio', id: 'ref-cit',
+                type: 'radio', id: 'ref-cit-'+idref,
                 items: [
                     [ 'Citação Direta', 'cd' ],
                     [ 'Citação Indireta', 'ci' ]
