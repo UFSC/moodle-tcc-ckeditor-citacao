@@ -67,7 +67,7 @@ CKEDITOR.plugins.citacao = {
         var citacao = editor.document.createElement('citacao');
 
 
-        var content = '[[' + ref_type + id_citacao + ' ' + citacao_text + ']]';
+        var content =citacao_text;
 
         citacao.setAttributes({
             contentEditable: 'false',

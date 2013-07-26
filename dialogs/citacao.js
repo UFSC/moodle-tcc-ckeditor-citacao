@@ -19,7 +19,9 @@
             $.each(val.collection, function (key, val) {
                 var obj = [];
                 var objects = [];
-                obj.push(val.display_message);
+                obj.push(val.direct_citation);
+                obj.push(val.indirect_citation);
+
                 $.each(val, function (key, val) {
                     obj.push(val);
                 });
@@ -40,21 +42,25 @@
         var retorno = { title: 'Adicionar Citação', minWidth: 400, minHeight: 200,
             contents: output,
             onOk: function () {
-                var selected_citacao = this.getValueOf(this._.currentTabId, 'ref-list').split(',');
-                var tipo_citacao = this.getValueOf(this._.currentTabId, 'ref-cit-'+this._.currentTabId);
+                var replace = this.getValueOf(this._.currentTabId,'ref-list').replace(/,[\W]/g,'&&&');
+                var selected_citacao = replace.split(',');
+                var tipo_citacao = this.getValueOf(this._.currentTabId, 'ref-cit-' + this._.currentTabId);
                 var ref_type = this._.currentTabId;
 
-                var id_citacao = selected_citacao[1];
-
+                var id_citacao = selected_citacao[2];
 
                 if (this._.currentTabId == 'gerais') {
                     if (tipo_citacao == 'cd') {
-                        var citacao_text = selected_citacao[2];
+                        var citacao_text = selected_citacao[2].replace('&&&', ', ');
                     } else {
-                        var citacao_text = selected_citacao[3];
+                        var citacao_text = selected_citacao[3].replace('&&&', ', ');
                     }
                 } else {
-                    var citacao_text = selected_citacao[0];
+                    if (tipo_citacao == 'cd') {
+                        var citacao_text = selected_citacao[0].replace('&&&', ', ');
+                    } else {
+                        var citacao_text = selected_citacao[1].replace('&&&', ', ');
+                    }
                 }
 
                 CKEDITOR.plugins.citacao.createPlaceholder(editor, this, id_citacao, citacao_text, ref_type, tipo_citacao);
@@ -86,7 +92,7 @@ function buildTipoCitacaoChooseBox(idref) {
         style: 'margin-top: 50px',
         children: [
             {
-                type: 'radio', id: 'ref-cit-'+idref,
+                type: 'radio', id: 'ref-cit-' + idref,
                 items: [
                     [ 'Citação Direta', 'cd' ],
                     [ 'Citação Indireta', 'ci' ]
