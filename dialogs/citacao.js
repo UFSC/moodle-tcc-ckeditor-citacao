@@ -10,27 +10,28 @@
             }
         });
         var output = [];
+        var url;
         //TODO: Refatoração desse(s) loop(s)
         $.each(result, function (key, val) {
 
             var element_items = [];
+            url = val.url;
 
             // Adapta a estrutura vinda do ajax para uso no plugin.
             $.each(val.collection, function (key, val) {
                 var obj = [];
                 var objects = [];
-                obj.push(val.direct_citation);
-                obj.push(val.indirect_citation);
+
 
                 $.each(val, function (key, val) {
                     obj.push(val);
                 });
+                obj.push(url);
                 objects.push(obj);
                 element_items.push([val.display_message, objects]);
             });
 
-            var elements = [buildElement(element_items), buildTipoCitacaoChooseBox(val.tab_name.toLowerCase())];
-            //var elements = [buildElement(element_items), buildTipoCitacaoChooseBox(val.tab_name.toLowerCase()), buildCreateNewButton(val.new_url)];
+            var elements = [buildElement(element_items), buildTipoCitacaoChooseBox(val.tab_name.toLowerCase()), buildCreateNewButton(url)];
 
             // Valores para criar tab
             var id = val.tab_name.toLowerCase();
@@ -42,26 +43,23 @@
         var retorno = { title: 'Adicionar Citação', minWidth: 400, minHeight: 200,
             contents: output,
             onOk: function () {
-                var replace = this.getValueOf(this._.currentTabId,'ref-list').replace(/,[\W]/g,'&&&');
-                var selected_citacao = replace.split(',');
+                var selected_element = this.getValueOf(this._.currentTabId, 'ref-list').split(',');
+
+                var id_citacao = selected_element[0];
+                var url_citacao = selected_element[2];
+
                 var tipo_citacao = this.getValueOf(this._.currentTabId, 'ref-cit-' + this._.currentTabId);
                 var ref_type = this._.currentTabId;
 
-                var id_citacao = selected_citacao[2];
+                var citacao = getCitacao(url_citacao, id_citacao);
 
-                if (this._.currentTabId == 'gerais') {
-                    if (tipo_citacao == 'cd') {
-                        var citacao_text = selected_citacao[2].replace('&&&', ', ');
-                    } else {
-                        var citacao_text = selected_citacao[3].replace('&&&', ', ');
-                    }
+
+                if (tipo_citacao == 'cd') {
+                    var citacao_text = citacao.direct_citation;
                 } else {
-                    if (tipo_citacao == 'cd') {
-                        var citacao_text = selected_citacao[0].replace('&&&', ', ');
-                    } else {
-                        var citacao_text = selected_citacao[1].replace('&&&', ', ');
-                    }
+                    var citacao_text = citacao.indirect_citation;
                 }
+
 
                 CKEDITOR.plugins.citacao.createPlaceholder(editor, this, id_citacao, citacao_text, ref_type, tipo_citacao);
             },
@@ -113,8 +111,20 @@ function buildCreateNewButton(url) {
         type: 'html',
         id: 'new-citacao',
         label: 'Criar Nova Referências',
-        html: '<a href="' + url + '">Nova Referência</a>'
+        html: '<a href="' + '/' + url + '/new' + '">Nova Referência</a>'
     };
+}
+function getCitacao(url, id) {
+    var result;
+    $.ajax({
+        dataType: "json",
+        url: '/' + url + '/' + id + '.json',
+        async: false,
+        success: function (data) {
+            result = data;
+        }
+    });
+    return result[url.slice(0, -1)];
 }
 
 

@@ -23,15 +23,15 @@ CKEDITOR.plugins.add('citacao', {
 
         if (editor.addMenuItems) {
             editor.addMenuGroup('citacao', 20);
-            editor.addMenuItems({
-                editDialog: {
-                    label: 'Editar Citação',
-                    command: 'editDialog',
-                    group: 'citacao',
-                    order: 1,
-                    icon: 'citacao'
-                }
-            });
+//            editor.addMenuItems({
+//                editDialog: {
+//                    label: 'Editar Citação',
+//                    command: 'editDialog',
+//                    group: 'citacao',
+//                    order: 1,
+//                    icon: 'citacao'
+//                }
+//            });
 
             if (editor.contextMenu) {
                 editor.contextMenu.addListener(function(element, selection) {
