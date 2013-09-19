@@ -43,10 +43,12 @@
         var retorno = { title: 'Adicionar Citação', minWidth: 400, minHeight: 200,
             contents: output,
             onOk: function () {
+
                 var selected_element = this.getValueOf(this._.currentTabId, 'ref-list').split(',');
 
                 var id_citacao = selected_element[0];
-                var url_citacao = selected_element[2];
+                var url_citacao = selected_element[selected_element.length - 1]
+
 
                 var tipo_citacao = this.getValueOf(this._.currentTabId, 'ref-cit-' + this._.currentTabId);
                 var ref_type = this._.currentTabId;
@@ -60,8 +62,13 @@
                     var citacao_text = citacao.indirect_citation;
                 }
 
+                var pagina = (ref_type == 'artigos') || (ref_type == 'capítulos') || (ref_type == 'legislativo') || (ref_type == 'livros')
+                if (pagina) {
+                    var p = prompt("Digite a página da referência. Cancele para não colocar página.");
+                }
 
-                CKEDITOR.plugins.citacao.createPlaceholder(editor, this, id_citacao, citacao_text, ref_type, tipo_citacao);
+
+                CKEDITOR.plugins.citacao.createPlaceholder(editor, this, id_citacao, citacao_text, ref_type, tipo_citacao, p);
             },
             onShow: function () {
                 if (isEdit) {
