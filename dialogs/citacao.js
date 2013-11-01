@@ -3,7 +3,7 @@
         var result = [];
         $.ajax({
             dataType: "json",
-            url: '/bibliographies.json',
+            url: '/bibliographies.json'+location.search,
             async: false,
             success: function (data) {
                 result = data;
