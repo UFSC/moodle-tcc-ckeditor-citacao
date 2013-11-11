@@ -78,6 +78,7 @@ CKEDITOR.plugins.citacao = {
             'data-cke-citacao': 1,
             'class': 'citacao-class'
         });
+        citacao.setAttribute('pagina', p);
         citacao.setAttribute('title', content);
         citacao.setAttribute('citacao-text', citacao_text);
         citacao.setAttribute('ref-type', ref_type);
