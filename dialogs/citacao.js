@@ -67,8 +67,7 @@
                     var p = prompt("Digite a página da referência. Cancele para não colocar página.");
                 }
 
-
-                CKEDITOR.plugins.citacao.createPlaceholder(editor, this, id_citacao, citacao_text, ref_type, tipo_citacao, p);
+                CKEDITOR.plugins.citacao.createPlaceholder(editor, this, id_citacao, citacao_text, ref_type, tipo_citacao, p, citacao.reference_id);
             },
             onShow: function () {
                 if (isEdit) {
