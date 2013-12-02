@@ -98,8 +98,8 @@ function buildTipoCitacaoChooseBox(idref) {
             {
                 type: 'radio', id: 'ref-cit-' + idref,
                 items: [
-                    [ 'Citação Direta', 'cd' ],
-                    [ 'Citação Indireta', 'ci' ]
+                    [ 'Citação com autor NÃO incluido no texto <br> Ex.: (SOUZA, 2000) <br> Ex.: (SOUZA, 2000, p. 12)', 'cd' ],
+                    [ 'Citação com autor incluido no texto <br> Ex.: Souza (2000) <br> Ex.: Souza (2000, p. 12)', 'ci' ]
                 ], 'default': 'cd'
             }
         ]};
