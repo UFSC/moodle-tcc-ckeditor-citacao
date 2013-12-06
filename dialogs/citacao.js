@@ -124,7 +124,7 @@ function getCitacao(url, id) {
     var result;
     $.ajax({
         dataType: "json",
-        url: '/' + url + '/' + id + '.json',
+        url: '/' + url + '/' + id + '.json' + location.search,
         async: false,
         success: function (data) {
             result = data;
