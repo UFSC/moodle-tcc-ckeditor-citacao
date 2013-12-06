@@ -1,29 +1,29 @@
-(function () {
+(function() {
     function createDialog(editor, isEdit) {
         var result = [];
         $.ajax({
             dataType: "json",
-            url: '/bibliographies.json'+location.search,
+            url: '/bibliographies.json' + location.search,
             async: false,
-            success: function (data) {
+            success: function(data) {
                 result = data;
             }
         });
         var output = [];
         var url;
         //TODO: Refatoração desse(s) loop(s)
-        $.each(result, function (key, val) {
+        $.each(result, function(key, val) {
 
             var element_items = [];
             url = val.url;
 
             // Adapta a estrutura vinda do ajax para uso no plugin.
-            $.each(val.collection, function (key, val) {
+            $.each(val.collection, function(key, val) {
                 var obj = [];
                 var objects = [];
 
 
-                $.each(val, function (key, val) {
+                $.each(val, function(key, val) {
                     obj.push(val);
                 });
                 obj.push(url);
@@ -42,7 +42,7 @@
 
         var retorno = { title: 'Adicionar Citação', minWidth: 400, minHeight: 200,
             contents: output,
-            onOk: function () {
+            onOk: function() {
 
                 var selected_element = this.getValueOf(this._.currentTabId, 'ref-list').split(',');
 
@@ -69,9 +69,10 @@
 
                 CKEDITOR.plugins.citacao.createPlaceholder(editor, this, id_citacao, citacao_text, ref_type, tipo_citacao, p, citacao.reference_id);
             },
-            onShow: function () {
+            onShow: function() {
+                // Este é o comportamento que será executado quando uma edição de citação for realizada
                 if (isEdit) {
-                    this._element = CKEDITOR.plugins.citacao.getSelectedPlaceHolder(editor);
+                    this._element = CKEDITOR.plugins.citacao.getSelectedCitation(editor);
                 }
                 this.setupContent(this._element);
             }
@@ -79,10 +80,10 @@
         return retorno;
     }
 
-    CKEDITOR.dialog.add('citacaoDialog', function (editor) {
+    CKEDITOR.dialog.add('insertCitation', function(editor) {
         return createDialog(editor);
     });
-    CKEDITOR.dialog.add('editDialog', function (editor) {
+    CKEDITOR.dialog.add('editCitation', function(editor) {
         return createDialog(editor, 1);
     });
 
@@ -104,6 +105,7 @@ function buildTipoCitacaoChooseBox(idref) {
             }
         ]};
 }
+
 function buildElement(element_items) {
     return {
         type: 'select',
@@ -112,6 +114,7 @@ function buildElement(element_items) {
         label: 'Escolha a citação',
         items: element_items};
 }
+
 function buildCreateNewButton(url) {
     return   {
         type: 'html',
@@ -120,13 +123,14 @@ function buildCreateNewButton(url) {
         html: '<a href="' + '/' + url + '/new' + '">Nova Referência</a>'
     };
 }
+
 function getCitacao(url, id) {
     var result;
     $.ajax({
         dataType: "json",
         url: '/' + url + '/' + id + '.json' + location.search,
         async: false,
-        success: function (data) {
+        success: function(data) {
             result = data;
         }
     });
