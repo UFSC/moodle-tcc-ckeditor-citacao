@@ -3,7 +3,7 @@
         var result = [];
         $.ajax({
             dataType: "json",
-            url: '/bibliographies.json' + location.search,
+            url: '../bibliographies.json',
             async: false,
             success: function(data) {
                 result = data;
@@ -128,7 +128,7 @@ function getCitacao(url, id) {
     var result;
     $.ajax({
         dataType: "json",
-        url: '/' + url + '/' + id + '.json' + location.search,
+        url: '../' + url + '/' + id + '.json',
         async: false,
         success: function(data) {
             result = data;
