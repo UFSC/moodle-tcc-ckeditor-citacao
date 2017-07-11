@@ -40,7 +40,7 @@
             output.push(obj);
         });
 
-        var retorno = { title: 'Adicionar Citação', minWidth: 400, minHeight: 200,
+        var retorno = { title: 'Adicionar Citação', minWidth: 650, minHeight: 200,
             contents: output,
             onOk: function() {
 
@@ -110,7 +110,7 @@ function buildElement(element_items) {
     return {
         type: 'select',
         id: 'ref-list',
-        style: 'width: 400px',
+        style: 'width: 650px',
         label: 'Escolha a citação',
         items: element_items};
 }
