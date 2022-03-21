@@ -62,7 +62,7 @@
                     var citacao_text = citacao.indirect_citation;
                 }
 
-                var pagina = (ref_type == 'artigos') || (ref_type == 'capítulos') || (ref_type == 'legislativo') || (ref_type == 'livros')
+                var pagina = (ref_type == 'artigos') || (ref_type == 'capítulos') || (ref_type == 'legislativo') || (ref_type == 'livros') || (ref_type == 'teses')
                 if (pagina) {
                     var p = prompt("Digite a página da referência. Cancele para não colocar página.");
                 }
